@@ -6,6 +6,9 @@ from django.views import generic
 from django.http import JsonResponse
 from rest_framework import viewsets
 from .models import Choice, Question
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+import json
 
 import requests
 from django.shortcuts import render
@@ -29,7 +32,7 @@ def get_nocodb_data(request):
 
         # Формируем JSON-ответ
         response_data = {
-            "users": "http://localhost:8080/users/",  # Ссылка на таблицу
+            "nocodb-data": "http://localhost:8080/nocodb-data/",  # Ссылка на таблицу
             "records": records  # Данные таблицы
         }
         return JsonResponse(response_data, status=200)
@@ -38,22 +41,34 @@ def get_nocodb_data(request):
         return JsonResponse({"error": "Не удалось получить данные из NocoDB"}, status=response.status_code)
 
 class DataViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
     def list(self, request):
         # URL API NocoDB
-        url = "https://congenial-space-tribble-9p54g665pvhx69p-8080.app.github.dev/nocodb-data/"
+        url = "https://app.nocodb.com/api/v2/tables/mwkq779ax6eme5u/records"
         headers = {
-            "xc-token": "C3UrQ22BaOLseRT7wVTTqy3PQ4yg4JV-RLZxnX6T",  # Замените на ваш API-ключ
+            "xc-token": "C3UrQ22BaOLseRT7wVTTqy3PQ4yg4JV-RLZxnX6T",
         }
 
         # Получаем данные из NocoDB
         response = requests.get(url, headers=headers)
+        print(response)
 
         if response.status_code == 200:
-            data = response.json()
-            records = data.get('records', [])
-            return Response(records)
+            # # Выводим содержимое ответа перед попыткой декодирования
+            # print("Ответ от сервера:")
+            # print(response.content.decode())  # Декодируем байты в строку для удобного чтения
+
+            try:
+                data = response.json()
+                print(data)
+                records = data.get('list', [])
+                return Response(records)
+            except json.JSONDecodeError as e:
+                return Response({"error": f"Не удалось декодировать JSON: {str(e)}"})
         else:
-            return Response({"error": "Не удалось получить данные из NocoDB"}, status=response.status_code)
+            return Response({"error": f"Не удалось получить данные из NocoDB ({response.status_code})"}, status=response.status_code)
+
 
 
 class IndexView(generic.ListView):
