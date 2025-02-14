@@ -6,7 +6,6 @@ from django.views import generic
 from django.http import JsonResponse
 
 from .models import Choice, Question
-import requests
 
 import requests
 from django.shortcuts import render
