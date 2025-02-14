@@ -21,6 +21,8 @@ from rest_framework import routers, serializers, viewsets
 from django.urls import path, include
 from django.contrib.auth.models import User
 from polls.models import Choice
+from polls.views import get_nocodb_data
+# from polls.views import nocodb_table
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -45,6 +47,7 @@ urlpatterns = [
     path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-    
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('nocodb-data/', get_nocodb_data, name='nocodb_data'),
+    # path('nocodb-table/', nocodb_table, name='nocodb_table'),
 ]
