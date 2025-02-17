@@ -6,7 +6,7 @@ import plotly.express as px
 
 # Incorporate data
 def get_nocodb_data():
-    url = "http://localhost:8080/nocodb-data/"
+    url = "http://localhost:8000/nocodb-data/"
     # headers = {
     #     "xc-token": "C3UrQ22BaOLseRT7wVTTqy3PQ4yg4JV-RLZxnX6T",  # Замените на ваш API-ключ
     # }

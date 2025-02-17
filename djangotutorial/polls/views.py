@@ -32,7 +32,7 @@ def get_nocodb_data(request):
 
         # Формируем JSON-ответ
         response_data = {
-            "nocodb-data": "http://localhost:8080/nocodb-data/",  # Ссылка на таблицу
+            "nocodb-data": "http://localhost:8000/nocodb-data/",  # Ссылка на таблицу
             "records": records  # Данные таблицы
         }
         return JsonResponse(response_data, status=200)
