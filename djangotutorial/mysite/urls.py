@@ -24,6 +24,11 @@ from django.contrib.auth.models import User
 from polls.models import Choice
 from polls.views import get_nocodb_data
 from polls.views import DataViewSet  
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.conf import settings
+from django.conf.urls.static import static
+from django_mkdocs.views import MkDocsView
+
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,4 +59,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('nocodb-data/', get_nocodb_data, name='nocodb_data'),
     # path('nocodb-table/', nocodb_table, name='nocodb_table'),
-]
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+     path('docs/', MkDocsView.as_view(), name='mkdocs'),
+    
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

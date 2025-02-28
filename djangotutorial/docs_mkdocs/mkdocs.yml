@@ -1,0 +1,5 @@
+   site_name: My Django Project
+   nav:
+     - Home: index.md
+     - Models: models.md
+     - Views: views.md

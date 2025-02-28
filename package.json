@@ -6,9 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build" 
+    "build": "vite build"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "swagger-ui-react": "^5.20.0"
+  }
 }
