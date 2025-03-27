@@ -27,7 +27,8 @@ from polls.views import DataViewSet
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf import settings
 from django.conf.urls.static import static
-from django_mkdocs.views import MkDocsView
+from django.urls import path, include
+# from django_mkdocs.views import MkDocsView
 
 
 # Serializers define the API representation.
@@ -61,6 +62,6 @@ urlpatterns = [
     # path('nocodb-table/', nocodb_table, name='nocodb_table'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-     path('docs/', MkDocsView.as_view(), name='mkdocs'),
+    # path('docs/', MkDocsView.as_view(), name='mkdocs'),
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
