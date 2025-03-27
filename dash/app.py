@@ -1,4 +1,3 @@
-# Import packages
 from dash import Dash, html, dash_table, dcc
 import requests
 import pandas as pd
@@ -7,18 +6,26 @@ import plotly.express as px
 # Incorporate data
 def get_nocodb_data():
     url = "http://localhost:8000/nocodb-data/"
-    # headers = {
-    #     "xc-token": "C3UrQ22BaOLseRT7wVTTqy3PQ4yg4JV-RLZxnX6T",  # Замените на ваш API-ключ
-    # }
-
-    # Получаем данные
+    
     response = requests.get(url)
     if response.status_code == 200:
-        data = response.json()
-        # Предполагаем, что данные находятся в ключе 'list'
-        records = data.get('records', [])
-        print(records)
-        return pd.DataFrame(records)
+        data = response.json()  # Десериализуем JSON
+        print("Полученные данные:", data)  # Отладочный вывод
+        
+        # Если data — это список, берем первый элемент (если он есть)
+        if isinstance(data, list):
+            if len(data) > 0 and isinstance(data[0], dict):  
+                records = data  # Если список уже содержит объекты, используем его напрямую
+            else:
+                print("Ошибка: API вернул пустой список или некорректные данные")
+                return pd.DataFrame()
+        elif isinstance(data, dict):
+            records = data.get('records', [])  # Если API возвращает словарь, ищем 'records'
+        else:
+            print("Ошибка: API вернул неожиданный формат данных")
+            return pd.DataFrame()
+        
+        return pd.DataFrame(records)  # Преобразуем в DataFrame
     else:
         print("Ошибка при получении данных:", response.status_code)
         return pd.DataFrame()
